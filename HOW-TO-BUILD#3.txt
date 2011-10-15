@@ -1,0 +1,111 @@
+bluez
+1) download source tree of anroid gingerbread from Google.
+2) build android by 
+  . build/envsetup.sh
+  choosecombo (all default option, Product choices are: 2. generic)
+  make -j4
+3) replace external/bluez, and 'export BOARD_HAVE_BLUETOOTH=true'
+4) mmm external/bluetooth/glib
+   mmm external/bluetooth/bluez
+-------------------------------------------------------------------------------
+e2fsprogs
+1) download source tree of anroid gingerbread from Google.
+2) build android by
+  . build/envsetup.sh
+  choosecombo (all default option, Product choices are: 2. generic)
+  make -j4
+3) replace external/e2fsprogs
+4) mmm external/e2fsprogs
+-------------------------------------------------------------------------------
+webkit
+1) download source tree of anroid gingerbread from Google.
+2) build android by
+  . build/envsetup.sh
+  choosecombo (all default option, Product choices are: 2. generic)
+  make -j4
+3) replace external/webkit
+4) mmm external/webkit
+-------------------------------------------------------------------------------
+wpa_supplicant
+1) download source tree of anroid gingerbread from Google.
+2) build android by 
+  . build/envsetup.sh
+  choosecombo (all default option, Product choices are: 2. generic)
+  make -j4
+3) replace external/wpa_supplicant_6
+4) mmm external/wpa_supplicant_6/wpa_supplicant
+-------------------------------------------------------------------------------
+kernel
+1) download source tree of android gingerbread from Google. (Android 2.3.5R1)
+2) get source of "device" and "vendor" folder for msm8660 from Qualcomm. (M8660AAABQNLYA3134)
+3) edit android/device/qcom/common/common.mk
+before:
+-----------
+include build/core/utils.mk
+
+after:
+-----------
+# include build/core/utils.mk
+
+4) edit android/build/core/base_rules.mk
+before:
+-----------
+    $(error user tag detected on new module - user tags are only supported on legacy modules)
+
+after:
+-----------
+#    $(error user tag detected on new module - user tags are only supported on legacy modules)
+
+5) edit android/device/qcom/msm8660_surf/BoardConfig.mk
+before:
+-----------
+TARGET_NO_BOOTLOADER := false
+
+BOARD_KERNEL_BASE    := 0x40200000
+
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00A00000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00A00000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 157286400
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 1073741824
+
+after:
+-----------
+TARGET_NO_BOOTLOADER := true
+
+BOARD_KERNEL_BASE    := 0x20000000
+
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00500000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00600000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0x10400000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x08C00000
+
+6) replace kernel
+7) build kernel by 
+  . build/envsetup.sh
+  choosecombo
+
+Build for the simulator or the device?
+     1. Device
+     2. Simulator
+
+Which would you like? [1] 1
+
+
+Build type choices are:
+     1. release
+     2. debug
+
+Which would you like? [1] 1
+
+
+Which product would you like? [generic] msm8660_surf
+
+
+Variant choices are:
+     1. user
+     2. userdebug
+     3. eng
+Which would you like? [eng] 3
+
+8) make -j4 bootimage
+-------------------------------------------------------------------------------
